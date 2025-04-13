@@ -49,6 +49,7 @@ class ListDrafts(MenuCommand):
 class Exit(MenuCommand):
     def execute(self, controller):
         exit(0)
+    
     def get_name(self) -> str:
         return "Exit"
 

@@ -15,15 +15,14 @@ def create_task_draft(title, description):
 def menu_propmpt():
     return menu_controller.display_menu()
 
-
-@click.command()
-@click.option('--menu-choice', prompt=menu_controller.display_menu())
-def menu(menu_choice):
-    print(f"Chosen: {menu_choice}")
-    menu_controller.handle_choice(int(menu_choice) - 1)
-    
+def main_loop():
+    click.echo("Welcome to Task Manager.")
+    while True:
+        menu_choice = click.prompt(menu_controller.display_menu())
+        print(f"Chosen: {menu_choice}")
+        menu_controller.handle_choice(int(menu_choice) - 1)
 
 if __name__ == '__main__':
-    click.echo("Welcome to Task Manager.")
-    menu()
+    main_loop()
+
     

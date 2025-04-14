@@ -18,7 +18,7 @@ def print_list(list: list[State]):
         print(t.__dict__)
 
 
-class Context:
+class TaskContext:
     def __init__(self, state: State):
         self._state: State = state
         self._state.context = self
@@ -53,7 +53,7 @@ class Context:
 
 
 class State(ABC):
-    _context: Context
+    _context: TaskContext
     _id: str
     _title: str
     _description: str
@@ -64,11 +64,11 @@ class State(ABC):
         self._id = str(uuid.uuid4())
 
     @property
-    def context(self) -> Context:
+    def context(self) -> TaskContext:
         return self._context
 
     @context.setter
-    def context(self, ctx: Context):
+    def context(self, ctx: TaskContext):
         self._context = ctx
 
     @property
@@ -147,7 +147,4 @@ class Task(State, SupportsComplete):
         print(f"[Task] Completing task '{self.title}'...")
         self.status = Status.DONE
         print(f"[Task] Task '{self.title}' is now DONE.")
-
-def createTaskDraft(title: str, description: str):
-    return Context(TaskDraft(title, description))
 

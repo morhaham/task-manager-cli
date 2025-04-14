@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Protocol
 import menu
+from task_service import TaskService
 
 # from menu import MenuController
 
@@ -13,6 +14,9 @@ class MenuCommand(Protocol):
 
 class CreateTask(MenuCommand):
     def execute(self, controller):
+        title = controller.cli.prompt("Enter task title")
+        description = controller.cli.prompt("Enter task description")
+        controller.task_service.create_task(title, description)
         controller.current_menu = menu.MainMenu()
     
     def get_name(self) -> str:
@@ -52,6 +56,13 @@ class Exit(MenuCommand):
     
     def get_name(self) -> str:
         return "Exit"
+
+class ReturnToMainMenu(MenuCommand):
+    def execute(self, controller):
+        controller.current_menu = menu.MainMenu()
+    
+    def get_name(self) -> str:
+        return "Return To Main Menu"
 
 class NotImplemented(MenuCommand):
     def __init__(self, message: str):

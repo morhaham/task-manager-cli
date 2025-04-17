@@ -58,10 +58,10 @@ class State(ABC):
     _title: str
     _description: str
 
-    def __init__(self, title: str, description: str):
+    def __init__(self, title: str, description: str, id: str = None):
         self._title = title
         self._description = description
-        self._id = str(uuid.uuid4())
+        self._id = str(uuid.uuid4()) if id is None else id
 
     @property
     def context(self) -> TaskContext:
@@ -75,9 +75,9 @@ class State(ABC):
     def id(self) -> str:
         return self._id
     
-    @context.setter
-    def id(self, id: str):
-        self._id = id
+    # @context.setter
+    # def id(self, id: str):
+    #     self._id = id
 
     @property
     def title(self) -> str:
@@ -89,6 +89,9 @@ class State(ABC):
     
     def to_str(self):
         json.dumps(self)
+
+    def __str__(self): 
+        return f"title: {self.title}, description: {self.description}"
 
 
 class SupportsPublish(ABC):
@@ -107,7 +110,6 @@ class SupportsComplete(ABC):
 
 
 class TaskDraft(State, SupportsPublish, SupportsSave):
-    
     @State.title.setter
     def title(self, value: str):
         print(f"[Draft] Title updated: {value}")
@@ -123,7 +125,8 @@ class TaskDraft(State, SupportsPublish, SupportsSave):
         for i, o in enumerate(drafts):
             if o.id == self.id:
                 drafts[i] = self
-                break
+                return
+        drafts.append(self)
 
     def publish(self) -> None:
         global drafts

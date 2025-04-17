@@ -1,9 +1,7 @@
 from typing import List, Protocol
-from menu_commands import CreateTask, Exit, ListDrafts, ListTasks, MenuCommand,ReturnToMainMenu
+from menu_commands import CreateTask, Exit, ListDrafts, ListTasks, MenuCommand,ReturnToMainMenu, EditTaskDraft
 from task import Task, TaskDraft
 from task_service import TaskService
-
-
 
 class Menu(Protocol):
     def get_commands(self) -> List[MenuCommand]:
@@ -15,17 +13,13 @@ class MainMenu(Menu):
             CreateTask(),
             ListTasks(),
             ListDrafts(),
-            Exit()
         ]
 
-
-# class TaskMenu(Menu):
-#     def get_commands(self) -> List[MenuCommand]:
-#         return [
-#             PublishTask(),
-#             DeleteTask(),
-#         ]
-    
+class TaskDraftMenu(Menu):
+    def get_commands(self) -> List[MenuCommand]:
+        return [
+            EditTaskDraft()
+        ]
 
 class MenuController:
     def __init__(self, task_service: TaskService, cli) -> None:
@@ -50,7 +44,7 @@ class MenuController:
         return self._cli
 
     def _get_current_menu_commands(self):
-        commands_with_return_to_main = self.current_menu.get_commands() + [ReturnToMainMenu()]
+        commands_with_return_to_main = self.current_menu.get_commands() + [ReturnToMainMenu(), Exit()]
         return commands_with_return_to_main
 
     def display_menu(self) -> str:

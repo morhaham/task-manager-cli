@@ -3,8 +3,6 @@ from typing import Protocol
 import menu
 from task_service import TaskService
 
-# from menu import MenuController
-
 class MenuCommand(Protocol):
     def execute(self, controller):
         ...
@@ -16,11 +14,23 @@ class CreateTask(MenuCommand):
     def execute(self, controller):
         title = controller.cli.prompt("Enter task title")
         description = controller.cli.prompt("Enter task description")
-        controller.task_service.create_task(title, description)
-        controller.current_menu = menu.MainMenu()
+        task_draft = controller.task_service.create_task(title=title, description=description)
+        task_draft.save()
+        controller.current_menu = menu.TaskDraftMenu()
     
     def get_name(self) -> str:
         return "Create Task"
+
+class EditTaskDraft(MenuCommand):
+    def excecute(self):
+        title = controller.cli.prompt("Enter task title")
+        description = controller.cli.prompt("Enter task description")
+        controller.task_service.edit_task_draft(id, title, description)
+        controller.current_menu = menu.MainMenu()
+
+    def get_name(self):
+        return "Edit Task Draft"
+        
 
 class ListTasks(MenuCommand):
     def execute(self, controller):

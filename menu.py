@@ -22,10 +22,11 @@ class TaskDraftMenu(Menu):
         ]
 
 class MenuController:
-    def __init__(self, task_service: TaskService, cli) -> None:
+    def __init__(self, task_service: TaskService, cli, context) -> None:
         self._current_menu = MainMenu()
         self._task_service = task_service
         self._cli = cli
+        self.context = context
 
     @property
     def current_menu(self):
